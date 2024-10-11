@@ -35,7 +35,7 @@ body {
     color: #00ffcc; /* Neon hover effect */
 }
 
-/* Main Content (Centering Title and Grid) */
+/* Main Content (Centering Title and City) */
 .main-content {
     display: flex;
     flex-direction: column;
@@ -47,14 +47,14 @@ body {
 }
 
 .main-title {
-    font-size: 48px;
+    font-size: 56px; /* Increased for better visibility */
     letter-spacing: 4px;
     margin-bottom: 30px;
-    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+    text-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc, 0 0 40px #00ffcc; /* Soft glow effect */
 }
 
-/* 3D Grid Container */
-#grid-container {
+/* 3D City Container */
+#city-container {
     width: 100%;
     height: 400px;
     overflow: hidden;
