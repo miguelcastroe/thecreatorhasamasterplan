@@ -1,54 +1,39 @@
-// Initialize Three.js scene for 3D grid
+// Initialize Three.js scene for 3D cityscape
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById('grid-container').appendChild(renderer.domElement);
+document.getElementById('city-container').appendChild(renderer.domElement);
 
-// Create a grid of boxes
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
-const gridSize = 10;
+// Create the 3D city
+const buildingGeometry = new THREE.BoxGeometry(1, 1, 1);
+const buildingMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffcc, wireframe: true }); // Neon wireframe
 
-for (let x = -gridSize; x < gridSize; x++) {
-    for (let y = -gridSize; y < gridSize; y++) {
-        const box = new THREE.Mesh(boxGeometry, boxMaterial);
-        box.position.set(x, y, 0);
-        scene.add(box);
+const citySize = 20; // Controls the size of the city (number of buildings)
+for (let x = -citySize; x < citySize; x += 2) {
+    for (let y = -citySize; y < citySize; y += 2) {
+        // Create buildings with random heights
+        const buildingHeight = Math.random() * 5 + 1; // Random height between 1 and 6
+        const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+        building.scale.y = buildingHeight;
+        building.position.set(x, buildingHeight / 2, y);
+        scene.add(building);
     }
 }
 
-camera.position.z = 20;
+camera.position.z = 50; // Move camera back to see the city
+camera.position.y = 20; // Elevate the camera for a better view
+camera.rotation.x = -0.4; // Tilt the camera slightly
 
 // Animation loop
 function animate() {
     requestAnimationFrame(animate);
-    scene.rotation.x += 0.005;
-    scene.rotation.y += 0.005;
+    scene.rotation.y += 0.002; // Slowly rotate the city for effect
     renderer.render(scene, camera);
 }
 animate();
 
-// Handle keyboard navigation
-document.addEventListener('keydown', (event) => {
-    const key = event.key;
-
-    if (key >= '1' && key <= '7') {
-        // Handle section switch based on number key (01 to 07)
-        const sectionId = `#section-${key}`;
-        document.querySelector(sectionId).scrollIntoView({
-            behavior: 'smooth'
-        });
-    } else if (key === 'ArrowUp' || key === 'ArrowDown') {
-        // Handle arrow key scrolling (up or down)
-        window.scrollBy({
-            top: key === 'ArrowUp' ? -window.innerHeight : window.innerHeight,
-            behavior: 'smooth'
-        });
-    }
-});
-
-// Responsive handling for Three.js when window resizes
+// Handle window resizing for responsiveness
 window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
